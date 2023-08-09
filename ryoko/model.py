@@ -38,8 +38,9 @@ class FunctionToModule(nn.Module):
 
 class RetNetDecoderLayer(nn.Module):
   def __init__(self, d_model: int, nhead: int, dim_feedforward: int = None,
-               dropout: float = 0.0, activation: any = 'relu', layer_norm_eps: float = 1e-5,
-               batch_first: bool = True, norm_first: bool = True, only_self_rttn: bool = True):
+               dropout: float = 0.0, activation: any = 'gelu', layer_norm_eps: float = 1e-5,
+               batch_first: bool = True, norm_first: bool = True, only_self_rttn: bool = True,
+               feed_forward: nn.Module = None):
     super().__init__()
 
     self._all_args = dict(d_model=d_model, nhead=nhead, dim_feedforward=dim_feedforward,
@@ -65,7 +66,7 @@ class RetNetDecoderLayer(nn.Module):
     if not only_self_rttn:
       self.cross_retention = MultiscaleRetention(d_model, nhead, batch_first=batch_first)
 
-    self.feed_forward = nn.Sequential(
+    self.feed_forward = feed_forward if feed_forward is not None else nn.Sequential(
       nn.Linear(d_model, dim_feedforward),
       FunctionToModule(_get_activation_fn(activation)),
       nn.Linear(dim_feedforward, d_model)
