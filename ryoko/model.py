@@ -38,7 +38,7 @@ class FunctionToModule(nn.Module):
 
 class RetNetDecoderLayer(nn.Module):
   def __init__(self, d_model: int, nhead: int, dim_feedforward: int = None,
-               dropout: float = 0.0, activation: any = 'gelu', layer_norm_eps: float = 1e-5,
+               dropout: float = 0.0, activation: any = 'gelu', layer_norm_eps: float = 1e-6,
                batch_first: bool = True, norm_first: bool = True, only_self_rttn: bool = True,
                feed_forward: nn.Module = None):
     super().__init__()
